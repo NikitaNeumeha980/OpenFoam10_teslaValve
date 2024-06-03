@@ -15,7 +15,7 @@ FoamFile
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 // application     simpleFoam;
-application     pisoFoam;
+application     pimpleFoam;
 
 startFrom       startTime;
 
@@ -30,7 +30,7 @@ deltaT          1e-8;
 // writeControl    timeStep;
 writeControl    runTime;
 
-writeInterval   1e-6;
+writeInterval   1e-4;
 
 purgeWrite      0;
 
@@ -48,7 +48,11 @@ adjustableRunTime   true;
 
 runTimeModifiable true;
 
-maxCo           0.5;
+adjustTimeStep  yes;
+
+maxCo           5.0;
+
+maxDeltaT       $writeInterval;
 
 // cacheTemporaryObjects
 // (

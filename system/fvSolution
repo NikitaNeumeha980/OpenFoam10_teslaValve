@@ -53,6 +53,14 @@ solvers
         relTol          0;
     }
 
+    "(U|k|epsilon|omega|f|v2)Final"
+    {
+        solver          smoothSolver;
+        smoother        symGaussSeidel;
+        tolerance       1e-08;
+        relTol          0;
+    }
+
     Phi
     {
         solver          GAMG;
@@ -66,7 +74,7 @@ solvers
     }
 }
 
-PISO
+PIMPLE
 {
     nCorrectors     2;
     nNonOrthogonalCorrectors 2;
