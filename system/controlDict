@@ -14,7 +14,8 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-application     simpleFoam;
+// application     simpleFoam;
+application     pisoFoam;
 
 startFrom       startTime;
 
@@ -22,13 +23,14 @@ startTime       0;
 
 stopAt          endTime;
 
-endTime         30000;
+endTime         1;
 
-deltaT          1;
+deltaT          1e-8;
 
-writeControl    timeStep;
+// writeControl    timeStep;
+writeControl    runTime;
 
-writeInterval   100;
+writeInterval   1e-6;
 
 purgeWrite      0;
 
@@ -42,7 +44,11 @@ timeFormat      general;
 
 timePrecision   6;
 
+adjustableRunTime   true;
+
 runTimeModifiable true;
+
+maxCo           0.5;
 
 // cacheTemporaryObjects
 // (

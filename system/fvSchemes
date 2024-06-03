@@ -16,7 +16,8 @@ FoamFile
 
 ddtSchemes
 {
-    default         steadyState;
+//     default         steadyState;
+    default         Euler;
 }
 
 gradSchemes
@@ -40,8 +41,8 @@ divSchemes
 
 laplacianSchemes
 {
-    default         Gauss linear corrected;
-//     default			Gauss linear limited corrected 0.5;
+//     default         Gauss linear corrected;
+    default			Gauss linear limited corrected 0.7;
 }
 
 interpolationSchemes
@@ -51,8 +52,8 @@ interpolationSchemes
 
 snGradSchemes
 {
-    default         corrected;
-//     default 		limited corrected 0.5;
+//     default         corrected;
+    default 		limited corrected 0.7;
 }
 
 wallDist

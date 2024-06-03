@@ -9,7 +9,10 @@ cp -r 0.orig 0
 runApplication -o\
     ideasUnvToFoam Mesh_simple.unv
 runApplication -o\
-    checkMesh -allGeometry -allTopology
+    polyDualMesh\
+        -overwrite\
+        -noFields\
+        120
 runApplication -o\
     transformPoints "scale=(1e-06 1e-06 1e-06)"
 
@@ -44,6 +47,9 @@ runApplication -o\
     decomposePar -force
 runParallel -o\
     renumberMesh -overwrite
+runParallel -o\
+    checkMesh -allGeometry -allTopology
+
 
 # граничные условия для начального приближения
 # обратное подключение
@@ -57,7 +63,7 @@ runParallel -a\
     foamDictionary\
         0/U\
         -entry boundaryField/out\
-        -set "{type zeroGradient;}"
+        -set "{type fixedValue; value uniform (5 0 0);}"
 # давление
 runParallel -a\
     foamDictionary\
@@ -166,7 +172,7 @@ runParallel -a\
     foamDictionary\
         0/U\
         -entry boundaryField/ent\
-        -set "{type zeroGradient;}"
+        -set "{type fixedValue; value uniform (5 0 0);}"
 
 # давление
 runParallel -a\
@@ -252,7 +258,7 @@ runParallel -a\
         0/U\
         -entry boundaryField/ent\
         -set "{type zeroGradient;}"
-runParallel -o\
+runParallel -a\
     $application
 
 cp -r postProcessing postProcessing_direct
