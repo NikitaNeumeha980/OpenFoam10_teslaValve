@@ -8,11 +8,11 @@ rm -r 0
 cp -r 0.orig 0
 runApplication -o\
     ideasUnvToFoam Mesh_simple.unv
-runApplication -o\
-    polyDualMesh\
-        -overwrite\
-        -noFields\
-        120
+# runApplication -o\
+#     polyDualMesh\
+#         -overwrite\
+#         -noFields\
+#         100
 runApplication -o\
     transformPoints "scale=(1e-06 1e-06 1e-06)"
 
@@ -33,6 +33,8 @@ runApplication -a\
         -entry entry0/defaultFaces/type\
         -set wall
 
+
+
 # Инициализация параллельного решения
 runApplication -a\
     foamDictionary\
@@ -47,23 +49,31 @@ runApplication -o\
     decomposePar -force
 runParallel -o\
     renumberMesh -overwrite
+
 runParallel -o\
     checkMesh -allGeometry -allTopology
-
 
 # граничные условия для начального приближения
 # обратное подключение
 # скорость
-runParallel -a\
-    foamDictionary\
-        0/U\
-        -entry boundaryField/ent\
-        -set "{type fixedValue; value uniform (5 0 0);}"
-runParallel -a\
-    foamDictionary\
-        0/U\
-        -entry boundaryField/out\
-        -set "{type fixedValue; value uniform (5 0 0);}"
+# runParallel -a\
+#     foamDictionary\
+#         0/U\
+#         -entry boundaryField/ent\
+#         -set "{type fixedValue; value uniform (3 0 0);}"
+# runParallel -a\
+#     foamDictionary\
+#         0/U\
+#         -entry boundaryField/out\
+#         -set "{type fixedValue; value uniform (0 0 0);}"
+#
+# runParallel -o\
+#     potentialFoam
+# runParallel -o\
+#     applyBoundaryLayer\
+#     -Cbl 0.2
+
+# Граничные условия для алгоритма simple
 # давление
 runParallel -a\
     foamDictionary\
@@ -86,7 +96,7 @@ runParallel -a\
         -entry boundaryField/ent\
         -set "{
             type        turbulentIntensityKineticEnergyInlet;
-            intensity   0.06;
+            intensity   0.05;
             value       uniform 1;
         }"
 runParallel -a\
@@ -127,14 +137,6 @@ runParallel -a\
         0/epsilon\
         -entry boundaryField/out\
         -set "{type     zeroGradient;}"
-
-runParallel -o\
-    potentialFoam
-runParallel -o\
-    applyBoundaryLayer\
-    -Cbl 0.2
-
-# Граничные условия для алгоритма simple
 runParallel -a\
     foamDictionary\
         0/U\
@@ -142,7 +144,7 @@ runParallel -a\
         -set "{
             type                flowRateInletVelocity;
             profile             turbulentBL;
-            volumetricFlowRate  1.25e-6;
+            volumetricFlowRate  3.75e-7;
             value               uniform (0 0 0);
         }"
 runParallel -a\
@@ -163,16 +165,21 @@ runApplication -o\
 runParallel -o\
     renumberMesh -overwrite
 
-runParallel -a\
-    foamDictionary\
-        0/U\
-        -entry boundaryField/out\
-        -set "{type fixedValue; value uniform (5 0 0);}"
-runParallel -a\
-    foamDictionary\
-        0/U\
-        -entry boundaryField/ent\
-        -set "{type fixedValue; value uniform (5 0 0);}"
+# runParallel -a\
+#     foamDictionary\
+#         0/U\
+#         -entry boundaryField/out\
+#         -set "{type fixedValue; value uniform (0 0 0);}"
+# runParallel -a\
+#     foamDictionary\
+#         0/U\
+#         -entry boundaryField/ent\
+#         -set "{type fixedValue; value uniform (-3 0 0);}"
+# runParallel -o\
+#     potentialFoam
+# runParallel -o\
+#     applyBoundaryLayer\
+#     -Cbl 0.2
 
 # давление
 runParallel -a\
@@ -237,12 +244,6 @@ runParallel -a\
         0/epsilon\
         -entry boundaryField/ent\
         -set "{type     zeroGradient;}"
-
-runParallel -o\
-    potentialFoam
-runParallel -o\
-    applyBoundaryLayer\
-    -Cbl 0.2
 runParallel -a\
     foamDictionary\
         0/U\
@@ -250,7 +251,7 @@ runParallel -a\
         -set "{
             type                flowRateInletVelocity;
             profile             turbulentBL;
-            volumetricFlowRate  1.25e-6;
+            volumetricFlowRate  3.75e-7;
             value               uniform (0 0 0);
         }"
 runParallel -a\

@@ -37,8 +37,8 @@ boundaryField
     {
 //     	type            	zeroGradient;
         type            	flowRateInletVelocity;
+//         profile             turbulentBL;
         profile             turbulentBL;
-//         profile             laminarBL;
         volumetricFlowRate	table
         (
             (0      0)

@@ -20,52 +20,90 @@ solvers
     {
         solver          GAMG;
 //         tolerance       1e-08;
-        tolerance       1e-06;
+        tolerance       1e-08;
         relTol          0.01;
-        smoother        DICGaussSeidel;
-//         smoother        GaussSeidel;
+//         smoother        symGaussSeidel;
+//         smoother        DICGaussSeidel;
+        smoother        GaussSeidel;
+
 //         solver          PCG;
 //         preconditioner  DIC;
-//         tolerance       1e-08;
-//         relTol          0.05;
+//         tolerance       1e-06;
+//         relTol          0.01;
+
+//         //     from windAroundBuildings
+//           "(U|k|omega|epsilon)"
+//     {
+//         solver          smoothSolver;
+//         smoother        symGaussSeidel;
+//         tolerance       1e-6;
+//         relTol          0.1;
+//     }
     }
 
-    pFinal
+    U
     {
-        $p;
-        tolerance       1e-06;
-        relTol          0;
-    }
-
-    pcorr
-    {
-        solver          GAMG;
-        tolerance       1e-06;
-        relTol          0;
+        solver          smoothSolver;
         smoother        GaussSeidel;
-    }
-
-    "(U|k|epsilon|omega|f|v2)"
-    {
-        solver          smoothSolver;
-        smoother        symGaussSeidel;
+//         nSweeps         2;
         tolerance       1e-08;
         relTol          0;
     }
 
-    "(U|k|epsilon|omega|f|v2)Final"
+    k
     {
         solver          smoothSolver;
-        smoother        symGaussSeidel;
+        smoother        GaussSeidel;
+        nSweeps         2;
         tolerance       1e-08;
         relTol          0;
     }
+
+    epsilon
+    {
+        solver          smoothSolver;
+        smoother        GaussSeidel;
+        nSweeps         2;
+        tolerance       1e-08;
+        relTol          0.0;
+    }
+
+//     pFinal
+//     {
+//         $p;
+//         tolerance       1e-06;
+//         relTol          0;
+//     }
+
+//     pcorr
+//     {
+//         solver          GAMG;
+//         tolerance       1e-06;
+//         relTol          0;
+//         smoother        GaussSeidel;
+//     }
+//
+//     "(U|k|epsilon|omega|f|v2)"
+//     {
+//         solver          smoothSolver;
+//         smoother        symGaussSeidel;
+//         tolerance       1e-08;
+//         relTol          0;
+//     }
+
+//     "(U|k|epsilon|omega|f|v2)Final"
+//     {
+//         solver          smoothSolver;
+//         smoother        symGaussSeidel;
+//         tolerance       1e-08;
+//         relTol          0;
+//     }
 
     Phi
     {
         solver          GAMG;
-        tolerance       1e-08;
-        relTol          0.1;
+        tolerance       1e-10;
+        relTol          0.01;
         smoother        GaussSeidel;
 //         solver          PCG;
 //         preconditioner  DIC;
@@ -74,27 +112,12 @@ solvers
     }
 }
 
-PIMPLE
-{
-    nCorrectors     2;
-    nNonOrthogonalCorrectors 2;
-    pRefCell        0;
-    pRefValue       0;
-
-    residualControl
-    {
-        p               1e-5;
-        U               1e-6;
-        "(k|epsilon|omega|f|v2)" 1e-5;
-    }
-}
-
-// SIMPLE
+// PIMPLE
 // {
-//     nNonOrthogonalCorrectors 3;
-//     consistent      yes;
-//     pRefCell		0;
-//     pRefValue		0;
+//     nCorrectors     2;
+//     nNonOrthogonalCorrectors 2;
+//     pRefCell        0;
+//     pRefValue       0;
 //
 //     residualControl
 //     {
@@ -104,22 +127,37 @@ PIMPLE
 //     }
 // }
 
+SIMPLE
+{
+    nNonOrthogonalCorrectors 3;
+    consistent      yes;
+    pRefCell		0;
+    pRefValue		0;
+
+    residualControl
+    {
+        p               1e-3;
+        U               1e-4;
+        "(k|epsilon|omega|f|v2)" 1e-4;
+    }
+}
+
 potentialFlow
 {
-    nNonOrthogonalCorrectors 100;
+    nNonOrthogonalCorrectors 40;
 }
 
 relaxationFactors
 {
-//     equations
-//     {
-//         U               0.6/; // 0.9 is more stable but 0.95 more convergent
-//         ".*"            0.7; // 0.9 is more stable but 0.95 more convergent
-//     }
-//     fields
-//     {
-//         p              0.6;
-//     }
+    equations
+    {
+        U               0.7/; // 0.9 is more stable but 0.95 more convergent
+        ".*"            0.7; // 0.9 is more stable but 0.95 more convergent
+    }
+    fields
+    {
+        p              0.3;
+    }
 }
 
 
